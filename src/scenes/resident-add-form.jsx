@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
-import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 
@@ -10,7 +9,7 @@ import residentsApi from "../api/residents.api";
 import { useAppData } from "../context/app-data-context";
 import { PageHeading } from "../common/typography";
 import { ErrorText } from "../common/layout";
-import { mediaQueryMinWidth, convertDateFormat } from "../common/lib";
+import { convertDateFormat } from "../common/lib";
 import { nationalityOptions, languageOptions, religionOptions } from "../data/dropdownOptions";
 import {
 	FormPage,
@@ -25,8 +24,8 @@ import {
 	ChoiceInput,
 	ButtonContainer,
 	SubmitButton,
-	selectOptionStyles,
 } from "../common/styling-forms";
+import { selectOptionStyles } from "../common/select-styles";
 
 const initialValues = {
 	firstName: "",
@@ -59,7 +58,6 @@ const toValues = (options) => options.map((option) => option.value);
 
 const ResidentAddForm = () => {
 	const navigate = useNavigate();
-	const isDesktop = useMediaQuery(mediaQueryMinWidth);
 	const { addResident } = useAppData();
 	const [submitError, setSubmitError] = useState(false);
 
@@ -90,7 +88,17 @@ const ResidentAddForm = () => {
 			<PageHeading>Add Resident</PageHeading>
 			<InputsContainer>
 				<Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={validationSchema}>
-					{({ values, errors, touched, submitCount, isSubmitting, handleBlur, handleChange, handleSubmit, setFieldValue }) => {
+					{({
+						values,
+						errors,
+						touched,
+						submitCount,
+						isSubmitting,
+						handleBlur,
+						handleChange,
+						handleSubmit,
+						setFieldValue,
+					}) => {
 						const errorFor = (name) => ((touched[name] || submitCount > 0) && errors[name]) || null;
 
 						const multiSelect = (name, label, options) => (
@@ -125,7 +133,7 @@ const ResidentAddForm = () => {
 
 						return (
 							<form onSubmit={handleSubmit} noValidate>
-								<Grid isDesktop={isDesktop}>
+								<Grid>
 									{textInput("firstName", "First Name")}
 									{textInput("lastName", "Last Name")}
 									{textInput("dob", "Date of birth (dd/mm/yyyy)")}

@@ -1,12 +1,11 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
-import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { useAppData } from "../context/app-data-context";
 import { PageHeading } from "../common/typography";
-import { mediaQueryMinWidth, fullName } from "../common/lib";
+import { fullName } from "../common/lib";
 import {
 	FormPage,
 	InputsContainer,
@@ -17,8 +16,8 @@ import {
 	Error,
 	ButtonContainer,
 	SubmitButton,
-	selectOptionStyles,
 } from "../common/styling-forms";
+import { selectOptionStyles } from "../common/select-styles";
 
 const validationSchema = Yup.object().shape({
 	activity: Yup.object().nullable().required("required"),
@@ -29,7 +28,6 @@ const validationSchema = Yup.object().shape({
 // Step 1 of the "new activity" wizard. The draft is kept in shared state for the next step.
 const ActivityNewForm = () => {
 	const navigate = useNavigate();
-	const isDesktop = useMediaQuery(mediaQueryMinWidth);
 	const { activities, teamMembers, activityDraft, setActivityDraft } = useAppData();
 
 	const activityOptions = activities
@@ -65,7 +63,7 @@ const ActivityNewForm = () => {
 
 						return (
 							<form onSubmit={handleSubmit} noValidate>
-								<Grid isDesktop={isDesktop}>
+								<Grid>
 									<InputContainer>
 										<InputLabel htmlFor="activity">Activity</InputLabel>
 										<Select

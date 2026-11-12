@@ -1,8 +1,5 @@
 import { DateTime } from "luxon";
 
-// min-width for mediaQuery
-export const mediaQueryMinWidth = "(min-width:1200px)";
-
 // convert "DD/MM/YYYY" to "YYYY-MM-DD" (the format the backend expects)
 export const convertDateFormat = (inputDate) => {
 	const [day, month, year] = inputDate.split("/");

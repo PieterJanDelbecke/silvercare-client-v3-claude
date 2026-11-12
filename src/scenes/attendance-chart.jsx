@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import styled from "@emotion/styled";
 import Select from "react-select";
 
 import residentsApi from "../api/residents.api";
@@ -7,27 +6,10 @@ import useAsync from "../hooks/useAsync";
 import { useAppData } from "../context/app-data-context";
 import { PageHeading, Body } from "../common/typography";
 import { fullName } from "../common/lib";
-import { InputLabel, selectOptionStyles } from "../common/styling-forms";
-import { colors } from "../styles/theme";
+import { InputLabel } from "../common/styling-forms";
+import { selectOptionStyles } from "../common/select-styles";
 import MyResponsivePie from "./components/PieChart";
 import AsyncContent from "./components/AsyncContent";
-
-const Container = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	height: 60vh;
-`;
-
-const FormContainer = styled.div`
-	margin-block: 20px;
-	width: 480px;
-	max-width: 90%;
-`;
-
-const Text = styled(Body)`
-	color: ${colors.greenAccent[500]};
-`;
 
 // Only mounted once a resident is chosen, so it never shows stale or placeholder data.
 const ResidentPie = ({ residentId }) => {
@@ -48,15 +30,15 @@ const AttendanceChart = () => {
 	const options = residents.map((resident) => ({ value: resident.id, label: fullName(resident) }));
 
 	return (
-		<Container>
+		<div className="flex h-[60vh] flex-col items-center">
 			<PageHeading>Attendance Chart</PageHeading>
-			<Text>last 30 days</Text>
-			<FormContainer>
+			<Body className="text-green-accent-500">last 30 days</Body>
+			<div className="my-5 w-[480px] max-w-[90%]">
 				<InputLabel htmlFor="resident">Resident</InputLabel>
 				<Select inputId="resident" options={options} onChange={setSelectedResident} styles={selectOptionStyles} />
-			</FormContainer>
+			</div>
 			{selectedResident && <ResidentPie key={selectedResident.value} residentId={selectedResident.value} />}
-		</Container>
+		</div>
 	);
 };
 

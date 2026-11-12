@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,85 +12,12 @@ import {
 import { PageHeading } from "../../common/typography";
 import { PageContainer, OutlineButton } from "../../common/layout";
 import { fullName } from "../../common/lib";
-import { colors } from "../../styles/theme";
+import { cn } from "../../common/tw";
 import Icon from "../../common/icons";
 import SearchBar from "../../common/searchBar";
 
-const TopContainer = styled.div`
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 18px;
-`;
-
-const Table = styled.table`
-	border-collapse: collapse;
-	width: 100%;
-`;
-
-const Row = styled.tr`
-	cursor: pointer;
-	background-color: ${(props) => (props.isSelected ? colors.primary[400] : "transparent")};
-	&:hover {
-		background-color: ${colors.primary[400]};
-	}
-`;
-
-const Td = styled.td`
-	padding: 8px;
-`;
-
-const Th = styled.th`
-	cursor: pointer;
-	padding: 12px 8px;
-	text-align: left;
-	background-color: ${colors.blueAccent[500]};
-	color: white;
-`;
-
-const ThCell = styled.div`
-	display: flex;
-	gap: 12px;
-`;
-
-const Footer = styled.div`
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	width: 100%;
-	background-color: ${colors.blueAccent[500]};
-	margin-top: 4px;
-	gap: 6px;
-`;
-
-const PageButton = styled.button`
-	cursor: pointer;
-	margin: 6px;
-	padding: 6px;
-	display: flex;
-	align-items: center;
-	&:disabled {
-		cursor: not-allowed;
-		opacity: 0.4;
-	}
-`;
-
-const SelectedContainer = styled.div`
-	display: flex;
-	min-width: 200px;
-	justify-content: space-between;
-	align-items: center;
-	gap: 12px;
-`;
-
-const SelectedText = styled.div`
-	color: ${colors.greenAccent[500]};
-`;
-
-const EmptyCell = styled.td`
-	padding: 16px 8px;
-	color: ${colors.grey[300]};
-`;
+const pageButtonClasses =
+	"m-1.5 flex cursor-pointer items-center p-1.5 disabled:cursor-not-allowed disabled:opacity-40";
 
 /**
  * Searchable, sortable, paginated list of people.
@@ -120,27 +46,31 @@ const PeopleTable = ({ title, columns, people, getDetailPath }) => {
 	return (
 		<PageContainer>
 			<PageHeading>{title}</PageHeading>
-			<TopContainer>
+			<div className="mb-[18px] flex w-full justify-between">
 				<SearchBar value={filtering} onChange={(e) => setFiltering(e.target.value)} />
 				{selectedPerson && (
-					<SelectedContainer>
-						<SelectedText>{fullName(selectedPerson)}</SelectedText>
+					<div className="flex min-w-[200px] items-center justify-between gap-3">
+						<div className="text-green-accent-500">{fullName(selectedPerson)}</div>
 						<OutlineButton onClick={() => navigate(getDetailPath(selectedPerson))}>View</OutlineButton>
-					</SelectedContainer>
+					</div>
 				)}
-			</TopContainer>
-			<Table>
+			</div>
+			<table className="w-full border-collapse">
 				<thead>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<tr key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<Th key={header.id} onClick={header.column.getToggleSortingHandler()}>
-									<ThCell>
+								<th
+									key={header.id}
+									onClick={header.column.getToggleSortingHandler()}
+									className="cursor-pointer bg-blue-accent-500 px-2 py-3 text-left text-white"
+								>
+									<div className="flex gap-3">
 										{flexRender(header.column.columnDef.header, header.getContext())}
-										{header.column.getIsSorted() === "asc" && <Icon name="arrowUp" size={16} color="white" />}
-										{header.column.getIsSorted() === "desc" && <Icon name="arrowDown" size={16} color="white" />}
-									</ThCell>
-								</Th>
+										{header.column.getIsSorted() === "asc" && <Icon name="arrowUp" size={16} />}
+										{header.column.getIsSorted() === "desc" && <Icon name="arrowDown" size={16} />}
+									</div>
+								</th>
 							))}
 						</tr>
 					))}
@@ -148,44 +78,65 @@ const PeopleTable = ({ title, columns, people, getDetailPath }) => {
 				<tbody>
 					{rows.length === 0 && (
 						<tr>
-							<EmptyCell colSpan={columns.length}>No results.</EmptyCell>
+							<td colSpan={columns.length} className="px-2 py-4 text-grey-300">
+								No results.
+							</td>
 						</tr>
 					)}
 					{rows.map((row) => (
-						<Row
+						<tr
 							key={row.id}
-							isSelected={selectedPerson?.id === row.original.id}
+							className={cn(
+								"cursor-pointer hover:bg-primary-400",
+								selectedPerson?.id === row.original.id && "bg-primary-400"
+							)}
 							onClick={() => setSelectedPerson(row.original)}
 							onDoubleClick={() => navigate(getDetailPath(row.original))}
 						>
 							{row.getVisibleCells().map((cell) => (
-								<Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
+								<td key={cell.id} className="p-2">
+									{flexRender(cell.column.columnDef.cell, cell.getContext())}
+								</td>
 							))}
-						</Row>
+						</tr>
 					))}
 				</tbody>
-			</Table>
-			<Footer>
+			</table>
+			<div className="mt-1 flex w-full items-center justify-end gap-1.5 bg-blue-accent-500">
 				<div>
 					{table.getState().pagination.pageIndex + 1} of {Math.max(table.getPageCount(), 1)}
 				</div>
-				<PageButton disabled={!table.getCanPreviousPage()} onClick={() => table.setPageIndex(0)}>
+				<button
+					className={pageButtonClasses}
+					disabled={!table.getCanPreviousPage()}
+					onClick={() => table.setPageIndex(0)}
+				>
 					First Page
-				</PageButton>
-				<PageButton
+				</button>
+				<button
+					className={pageButtonClasses}
 					disabled={!table.getCanPreviousPage()}
 					onClick={() => table.previousPage()}
 					aria-label="Previous page"
 				>
 					<Icon name="arrowLeft" size={16} />
-				</PageButton>
-				<PageButton disabled={!table.getCanNextPage()} onClick={() => table.nextPage()} aria-label="Next page">
+				</button>
+				<button
+					className={pageButtonClasses}
+					disabled={!table.getCanNextPage()}
+					onClick={() => table.nextPage()}
+					aria-label="Next page"
+				>
 					<Icon name="arrowRight" size={16} />
-				</PageButton>
-				<PageButton disabled={!table.getCanNextPage()} onClick={() => table.setPageIndex(table.getPageCount() - 1)}>
+				</button>
+				<button
+					className={pageButtonClasses}
+					disabled={!table.getCanNextPage()}
+					onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+				>
 					Last Page
-				</PageButton>
-			</Footer>
+				</button>
+			</div>
 		</PageContainer>
 	);
 };

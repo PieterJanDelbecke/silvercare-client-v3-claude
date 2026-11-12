@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useMediaQuery } from "@mui/material";
-import styled from "@emotion/styled";
 
-import { mediaQueryMinWidth } from "../../common/lib";
 import { Subheading } from "../../common/typography";
 import { ErrorText } from "../../common/layout";
-import { colors } from "../../styles/theme";
 import {
 	CheckboxInputs,
 	CheckboxGrid,
@@ -17,12 +13,6 @@ import {
 	ButtonContainer,
 	SubmitButton,
 } from "../../common/styling-forms";
-
-const Title = styled(Subheading)`
-	padding-bottom: 8px;
-	padding-left: 24px;
-	color: ${colors.greenAccent[500]};
-`;
 
 const FIELD = "selectedIds";
 
@@ -35,7 +25,6 @@ const validationSchema = Yup.object().shape({
  * `options` are { id, label }; `onSubmit` receives the selected ids as strings and may throw.
  */
 const CheckboxListForm = ({ title, options, initialSelectedIds = [], submitLabel = "Submit", onSubmit }) => {
-	const isDesktop = useMediaQuery(mediaQueryMinWidth);
 	const [submitError, setSubmitError] = useState(false);
 
 	const handleSubmit = async (values) => {
@@ -48,8 +37,8 @@ const CheckboxListForm = ({ title, options, initialSelectedIds = [], submitLabel
 	};
 
 	return (
-		<CheckboxInputs isDesktop={isDesktop}>
-			<Title>{title}</Title>
+		<CheckboxInputs>
+			<Subheading className="pb-2 pl-6 text-green-accent-500">{title}</Subheading>
 			<Formik
 				onSubmit={handleSubmit}
 				initialValues={{ [FIELD]: initialSelectedIds }}
@@ -59,7 +48,7 @@ const CheckboxListForm = ({ title, options, initialSelectedIds = [], submitLabel
 					<form onSubmit={submit}>
 						<CheckboxGrid role="group" aria-label={title}>
 							{options.map((option) => (
-								<CheckboxItem isDesktop={isDesktop} key={option.id}>
+								<CheckboxItem key={option.id}>
 									<ChoiceInput type="checkbox" name={FIELD} value={String(option.id)} />
 									{option.label}
 								</CheckboxItem>
@@ -67,7 +56,7 @@ const CheckboxListForm = ({ title, options, initialSelectedIds = [], submitLabel
 						</CheckboxGrid>
 						<Error>{touched[FIELD] && errors[FIELD] ? errors[FIELD] : null}</Error>
 						{submitError && <ErrorText>Something went wrong, please try again.</ErrorText>}
-						<ButtonContainer justify="center">
+						<ButtonContainer className="justify-center">
 							<SubmitButton type="submit" disabled={isSubmitting}>
 								{isSubmitting ? "Saving..." : submitLabel}
 							</SubmitButton>

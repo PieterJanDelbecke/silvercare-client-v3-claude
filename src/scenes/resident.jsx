@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import styled from "@emotion/styled";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useAppData } from "../context/app-data-context";
@@ -8,56 +7,23 @@ import useAsync from "../hooks/useAsync";
 import { Body } from "../common/typography";
 import { PageContainer, Card, ErrorText, OutlineButton } from "../common/layout";
 import { calculateAge, findById, formatDate, fullName } from "../common/lib";
-import { colors } from "../styles/theme";
 import ProfileHeader from "./components/ProfileHeader";
 import AsyncContent from "./components/AsyncContent";
 
-const DetailsCard = styled(Card)`
-	flex-direction: column;
-	gap: 8px;
-`;
-
-const DetailRow = styled.div`
-	display: flex;
-	align-items: flex-start;
-`;
-
-const Subject = styled.span`
-	flex-shrink: 0;
-	color: ${colors.greenAccent[500]};
-	width: 90px;
-`;
-
-const InfoItems = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	flex: 1;
-`;
-
-const InfoItem = styled.span`
-	text-transform: capitalize;
-	padding-inline: 8px;
-	& + & {
-		border-left: 1px solid ${colors.blueAccent[500]};
-	}
-`;
-
-const Muted = styled.span`
-	padding-inline: 8px;
-	color: ${colors.grey[300]};
-`;
-
+// One "Subject: a | b | c" line on the resident page.
 const Detail = ({ subject, items, action }) => (
-	<DetailRow>
-		<Subject>{subject}:</Subject>
-		<InfoItems>
-			{items.length === 0 && <Muted>none</Muted>}
+	<div className="flex items-start">
+		<span className="w-[90px] shrink-0 text-green-accent-500">{subject}:</span>
+		<div className="flex flex-1 flex-wrap">
+			{items.length === 0 && <span className="px-2 text-grey-300">none</span>}
 			{items.map((item) => (
-				<InfoItem key={item}>{item}</InfoItem>
+				<span key={item} className="px-2 capitalize [&+&]:border-l [&+&]:border-blue-accent-500">
+					{item}
+				</span>
 			))}
-		</InfoItems>
+		</div>
 		{action}
-	</DetailRow>
+	</div>
 );
 
 const Resident = () => {
@@ -85,7 +51,7 @@ const Resident = () => {
 			</ProfileHeader>
 			<AsyncContent state={details}>
 				{({ info, activities }) => (
-					<DetailsCard>
+					<Card className="flex-col gap-2">
 						<Detail subject="Nationality" items={info.nationalities} />
 						<Detail subject="Language" items={info.languages} />
 						<Detail subject="Religion" items={info.religions} />
@@ -93,12 +59,10 @@ const Resident = () => {
 							subject="Activities"
 							items={activities.map((activity) => activity.name)}
 							action={
-								<OutlineButton onClick={() => navigate(`/residents/${residentId}/activities/edit`)}>
-									edit
-								</OutlineButton>
+								<OutlineButton onClick={() => navigate(`/residents/${residentId}/activities/edit`)}>edit</OutlineButton>
 							}
 						/>
-					</DetailsCard>
+					</Card>
 				)}
 			</AsyncContent>
 		</PageContainer>

@@ -4,12 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App.jsx";
 import AppDataProvider from "./context/AppDataProvider.jsx";
-import Global from "./styles/global";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<Global />
 			<AppDataProvider>
 				<App />
 			</AppDataProvider>

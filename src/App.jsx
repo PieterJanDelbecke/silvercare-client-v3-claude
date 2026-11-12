@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
-
-import { mediaQueryMinWidth } from "./common/lib";
 import Topbar from "./scenes/global/topbar";
 import Sidebar from "./scenes/global/sidebar";
 import Dashboard from "./scenes/dashboard";
@@ -25,13 +22,12 @@ import Calendar from "./scenes/calendar";
 import NotFound from "./scenes/not-found";
 
 function App() {
-	const isDesktop = useMediaQuery(mediaQueryMinWidth);
 	const [menuOpen, setMenuOpen] = useState(false);
 
 	return (
-		<div className="app">
-			{(isDesktop || menuOpen) && <Sidebar overlay={!isDesktop} onNavigate={() => setMenuOpen(false)} />}
-			<main className="content">
+		<div className="relative flex">
+			<Sidebar open={menuOpen} onNavigate={() => setMenuOpen(false)} />
+			<main className="h-full w-full flex-1">
 				<Topbar onMenuClick={() => setMenuOpen((open) => !open)} />
 				<Routes>
 					<Route path="/" element={<Dashboard />} />

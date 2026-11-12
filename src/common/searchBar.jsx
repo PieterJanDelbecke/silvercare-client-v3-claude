@@ -1,35 +1,16 @@
-import styled from "@emotion/styled";
-import { AiOutlineSearch as SearchIcon } from "react-icons/ai";
-import { colors } from "../styles/theme";
+import Icon from "./icons";
 
-const Container = styled.div`
-	border-radius: 4px;
-	background-color: ${colors.primary[400]};
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-right: 8px;
-`;
-
-const SearchInput = styled.input`
-	color: ${colors.grey[100]};
-	background-color: ${colors.primary[400]};
-	margin: 12px;
-	:focus {
-		outline: none;
-	}
-`;
-
-const SearchBar = ({ value, onChange, iconSize }) => {
-	const iconStyle = {
-		fontSize: iconSize || "24px",
-	};
-	return (
-		<Container>
-			<SearchInput type="text" value={value} onChange={onChange} placeholder="Search" />
-			<SearchIcon style={iconStyle} />
-		</Container>
-	);
-};
+const SearchBar = ({ value, onChange, iconSize = 24 }) => (
+	<div className="flex items-center justify-between rounded bg-primary-400 pr-2">
+		<input
+			type="text"
+			value={value}
+			onChange={onChange}
+			placeholder="Search"
+			className="m-3 bg-primary-400 text-grey-100 focus:outline-none"
+		/>
+		<Icon name="search" size={iconSize} />
+	</div>
+);
 
 export default SearchBar;

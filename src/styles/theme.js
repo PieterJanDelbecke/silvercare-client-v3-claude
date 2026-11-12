@@ -1,3 +1,5 @@
+// Design tokens. Tailwind reads these (see tailwind.config.js); charts and react-select import them directly.
+
 const colors = {
 	grey: {
 		100: "#e0e0e0",
@@ -56,76 +58,7 @@ const colors = {
 	},
 };
 
-const typography = {
-	fonts: ['"Source Sans 3"', "sans-serif"].join(","),
-	size: {
-		s1: "12px",
-		s2: "14px",
-		s3: "16px",
-		m1: "20px",
-		m2: "24px",
-		m3: "28px",
-		l1: "32px",
-		l2: "36px",
-		l3: "40px",
-		l4: "48px",
-	},
-	letterSpacing: { regular: "0.1px", wide: "2px" },
-	defaultColor: colors.grey[100],
-};
-
-const spacers = {
-	desktop: {
-		xxs: "4px",
-		xs: "8px",
-		s: "16px",
-		m: "32px",
-		l: "40px",
-		xl: "64px",
-		xxl: "96px",
-	},
-	tablet: {},
-	mobile: {},
-};
-
-const grid = {
-	xl: {
-		min: "1520px",
-		max: "2152px",
-		cols: 12,
-		gutter: "24px",
-		margin: "32px",
-	},
-	large: {
-		min: "1280px",
-		max: "1520px",
-		cols: 12,
-		gutter: "24px",
-		margin: "32px",
-	},
-	desktop: {
-		min: "1096px",
-		max: "1280px",
-		cols: 12,
-		gutter: "24px",
-		margin: "32px",
-	},
-	tablet: {
-		min: "720px",
-		max: "1096px",
-		cols: 8,
-		gutter: "16px",
-		margin: "24px",
-	},
-	mobile: {
-		min: "375px",
-		max: "720px",
-		cols: 4,
-		gutter: "12px",
-		margin: "16px",
-	},
-};
-
+// Available as `shadow-elevation-100` … `shadow-elevation-500`.
 const elevation = {
 	100: "0px 1px 3px 1px #8B92A21A, 0px 1px 2px 0px #8B92A21A",
 	200: "0px 2px 6px 2px #8B92A21A, 0px 1px 2px 0px #8B92A21A",
@@ -134,8 +67,4 @@ const elevation = {
 	500: "0px 2px 3px 0px #8B92A21A, 0px 8px 12px 6px #8B92A21A",
 };
 
-const constants = {
-	sideMenuWidth: "89px",
-};
-
-export { colors, typography, spacers, grid, elevation, constants };
+export { colors, elevation };

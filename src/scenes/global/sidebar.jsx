@@ -1,56 +1,9 @@
-import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 
-import { colors } from "../../styles/theme";
+import { cn } from "../../common/tw";
 import { Heading, Subheading, Body } from "../../common/typography";
 import Icon from "../../common/icons";
 import { CURRENT_USER } from "../../config";
-
-const Container = styled.nav`
-	display: flex;
-	flex-direction: column;
-	min-width: 270px;
-	min-height: 100vh;
-	background-color: ${colors.primary[400]};
-	${(props) =>
-		props.overlay &&
-		`
-		position: fixed;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		z-index: 10;
-		box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
-	`}
-`;
-
-const UserContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-block: 12px;
-`;
-
-const Name = styled(Heading)`
-	color: #fff;
-`;
-
-const Role = styled(Subheading)`
-	color: ${colors.greenAccent[500]};
-`;
-
-const OptionsContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin: 12px 24px;
-	gap: 8px;
-`;
-
-const OptionLink = styled(NavLink)`
-	display: flex;
-	align-items: center;
-	gap: 16px;
-`;
 
 const MENU = [
 	{ title: "Dashboard", to: "/", icon: "home" },
@@ -64,29 +17,37 @@ const MENU = [
 	{ title: "FAQ", to: "/faq", icon: "faq" },
 ];
 
+// Always visible on desktop. On smaller screens it's hidden, and shown as an overlay while `open`.
 // The active item is derived from the URL, so it stays correct after a refresh or browser back/forward.
-const Sidebar = ({ overlay = false, onNavigate }) => (
-	<Container overlay={overlay}>
-		<UserContainer>
-			<Name>{CURRENT_USER.name}</Name>
-			<Role>{CURRENT_USER.role}</Role>
-		</UserContainer>
-		<OptionsContainer>
+const Sidebar = ({ open = false, onNavigate }) => (
+	<nav
+		className={cn(
+			"min-h-screen min-w-[270px] flex-col bg-primary-400",
+			open ? "fixed inset-y-0 left-0 z-10 flex shadow-[4px_0_16px_rgba(0,0,0,0.5)]" : "hidden",
+			"desktop:static desktop:flex desktop:shadow-none"
+		)}
+	>
+		<div className="my-3 flex flex-col items-center">
+			<Heading className="text-white">{CURRENT_USER.name}</Heading>
+			<Subheading className="text-green-accent-500">{CURRENT_USER.role}</Subheading>
+		</div>
+		<div className="mx-6 my-3 flex flex-col gap-2">
 			{MENU.map(({ title, to, icon }) => (
-				<OptionLink key={to} to={to} end onClick={onNavigate}>
-					{({ isActive }) => {
-						const color = isActive ? colors.blueAccent[500] : colors.grey[100];
-						return (
-							<>
-								<Icon name={icon} color={color} />
-								<Body style={{ color }}>{title}</Body>
-							</>
-						);
-					}}
-				</OptionLink>
+				<NavLink
+					key={to}
+					to={to}
+					end
+					onClick={onNavigate}
+					className={({ isActive }) =>
+						cn("flex items-center gap-4", isActive ? "text-blue-accent-500" : "text-grey-100")
+					}
+				>
+					<Icon name={icon} />
+					<Body>{title}</Body>
+				</NavLink>
 			))}
-		</OptionsContainer>
-	</Container>
+		</div>
+	</nav>
 );
 
 export default Sidebar;

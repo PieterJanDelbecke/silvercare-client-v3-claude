@@ -1,17 +1,8 @@
-import styled from "@emotion/styled";
 import { RotatingLines } from "react-loader-spinner";
 import { colors } from "../../styles/theme";
 
-const Container = styled.div`
-	width: 200px;
-	height: 200px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`;
-
 const LoadingSpinner = () => (
-	<Container>
+	<div className="flex h-[200px] w-[200px] items-center justify-center">
 		<RotatingLines
 			visible={true}
 			height="48"
@@ -21,7 +12,7 @@ const LoadingSpinner = () => (
 			animationDuration="0.75"
 			ariaLabel="loading"
 		/>
-	</Container>
+	</div>
 );
 
 export default LoadingSpinner;

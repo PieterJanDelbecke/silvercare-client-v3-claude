@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
@@ -6,35 +5,6 @@ import { useAppData } from "../context/app-data-context";
 import { PageHeading } from "../common/typography";
 import { PageContainer } from "../common/layout";
 import { formatDate } from "../common/lib";
-import { colors } from "../styles/theme";
-
-const Table = styled.table`
-	border-collapse: collapse;
-	width: 100%;
-`;
-
-const Row = styled.tr`
-	cursor: pointer;
-	&:hover {
-		background-color: ${colors.primary[400]};
-	}
-`;
-
-const Td = styled.td`
-	padding: 8px;
-`;
-
-const Th = styled.th`
-	padding: 12px 8px;
-	text-align: left;
-	background-color: ${colors.blueAccent[500]};
-	color: white;
-`;
-
-const Empty = styled.td`
-	padding: 16px 8px;
-	color: ${colors.grey[300]};
-`;
 
 // Defined outside the component so the table doesn't get new columns on every render.
 const columns = [
@@ -56,12 +26,14 @@ const Dashboard = () => {
 	return (
 		<PageContainer>
 			<PageHeading>Dashboard</PageHeading>
-			<Table>
+			<table className="w-full border-collapse">
 				<thead>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<tr key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<Th key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</Th>
+								<th key={header.id} className="bg-blue-accent-500 px-2 py-3 text-left text-white">
+									{flexRender(header.column.columnDef.header, header.getContext())}
+								</th>
 							))}
 						</tr>
 					))}
@@ -69,18 +41,26 @@ const Dashboard = () => {
 				<tbody>
 					{lastOrganisedActivities.length === 0 && (
 						<tr>
-							<Empty colSpan={columns.length}>No activities organised yet.</Empty>
+							<td colSpan={columns.length} className="px-2 py-4 text-grey-300">
+								No activities organised yet.
+							</td>
 						</tr>
 					)}
 					{table.getRowModel().rows.map((row) => (
-						<Row key={row.id} onClick={() => navigate(`/activities/${row.original.organisedActivityId}`)}>
+						<tr
+							key={row.id}
+							className="cursor-pointer hover:bg-primary-400"
+							onClick={() => navigate(`/activities/${row.original.organisedActivityId}`)}
+						>
 							{row.getVisibleCells().map((cell) => (
-								<Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
+								<td key={cell.id} className="p-2">
+									{flexRender(cell.column.columnDef.cell, cell.getContext())}
+								</td>
 							))}
-						</Row>
+						</tr>
 					))}
 				</tbody>
-			</Table>
+			</table>
 		</PageContainer>
 	);
 };

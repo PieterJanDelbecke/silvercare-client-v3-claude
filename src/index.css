@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-primary-500 font-sans font-normal leading-none tracking-[0.1px] text-grey-100 antialiased;
+	}
+
+	/* Tailwind's preflight leaves table headers bold; the design uses regular weight. */
+	th {
+		font-weight: inherit;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: #e0e0e0;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #888;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+}
