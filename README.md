@@ -3,7 +3,7 @@
 Admin dashboard for aged care villages: manage residents and team members, log organised activities and
 their attendance, and view attendance charts.
 
-Built with React 18 + Vite. Talks to the `silvercare-server-v3-claude` backend.
+Built with React 18 + TypeScript + Vite. Talks to the `silvercare-server-v3-claude` backend.
 
 ## Getting started
 
@@ -18,7 +18,8 @@ The backend must be running (default `http://localhost:4000`).
 | Script            | What it does                         |
 | ----------------- | ------------------------------------ |
 | `npm run dev`     | Start the dev server                 |
-| `npm run build`   | Production build into `dist/`        |
+| `npm run build`   | Type-check, then production build into `dist/` |
+| `npm run typecheck` | Type-check only (`tsc`)            |
 | `npm run lint`    | ESLint, fails on any warning         |
 | `npm run preview` | Serve the production build locally   |
 
@@ -26,13 +27,14 @@ The backend must be running (default `http://localhost:4000`).
 
 ```
 src/
-  api/          one file per backend area; all calls go through api/client.js
+  api/          one file per backend area; all calls go through api/client.ts
   context/      shared app data (residents, activities, team, last activities)
   hooks/        useAsync (load data with loading/error state), useOrganisedActivity
   common/       shared styled components, icons, helpers
   scenes/       one file per page; scenes/components holds reusable page parts
   styles/       theme, reset and global styles
   data/         static dropdown options and demo chart data
+  types.ts      shapes of the data the backend returns
 ```
 
 ## Routes
@@ -61,7 +63,7 @@ Every detail page takes its id from the URL, so pages can be refreshed, bookmark
 - Pages read shared data with `useAppData()`. Updates use functional `setState`, so they never overwrite
   each other.
 - Page-specific data is loaded with `useAsync`, which handles loading, errors and late responses.
-- `api/client.js` throws on network errors, non-2xx responses **and** on the v2 backend's
+- `api/client.ts` throws on network errors, non-2xx responses **and** on the v2 backend's
   `200 "ERROR: ..."` responses, so failures are never mistaken for data.
 
 ## Used libraries
